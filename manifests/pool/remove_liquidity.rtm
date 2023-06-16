@@ -1,0 +1,29 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+
+CALL_METHOD
+    Address("${account_address}")
+    "withdraw"
+    Address("${tracking_token}")
+    Decimal("100");
+
+TAKE_FROM_WORKTOP_BY_AMOUNT
+    Decimal("100")
+    Address("${tracking_token}")
+    Bucket("tackeing_token_bucket");
+
+
+# [Positive] remove liquidity
+CALL_METHOD    
+    Address("${component_address}")
+    "remove_liquidity"
+    Bucket("tackeing_token_bucket");
+
+# Return LPs
+CALL_METHOD
+    Address("${account_address}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP");

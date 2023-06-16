@@ -1,0 +1,28 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+
+# Withdraw token_a from account
+CALL_METHOD
+    Address("${account_address}")
+    "withdraw"
+    Address("${token_a}")
+    Decimal("100");
+TAKE_FROM_WORKTOP_BY_AMOUNT
+    Decimal("100")
+    Address("${token_a}")
+    Bucket("input");
+
+# [Positive] swap token_a for token_b
+CALL_METHOD    
+    Address("${component_address}")
+    "swap"
+    Bucket("input");
+
+# Return 100 LP Tokens to account
+CALL_METHOD
+    Address("${account_address}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP");

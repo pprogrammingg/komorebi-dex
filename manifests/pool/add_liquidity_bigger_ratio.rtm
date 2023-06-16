@@ -1,0 +1,40 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+
+CALL_METHOD
+    Address("${account_address}")
+    "withdraw"
+    Address("${token_a}")
+    Decimal("2000");
+
+TAKE_FROM_WORKTOP_BY_AMOUNT
+    Decimal("2000")
+    Address("${token_a}")
+    Bucket("bucket1");
+
+CALL_METHOD
+    Address("${account_address}")
+    "withdraw"
+    Address("${token_b}")
+    Decimal("50");
+
+TAKE_FROM_WORKTOP_BY_AMOUNT
+    Decimal("50")
+    Address("${token_b}")
+    Bucket("bucket2");
+
+# [Positive] add liquidity
+CALL_METHOD    
+    Address("${component_address}")
+    "add_liquidity"
+    Bucket("bucket1")
+    Bucket("bucket2");
+
+# Return LPs
+CALL_METHOD
+    Address("${account_address}")
+    "deposit_batch"
+    Expression("ENTIRE_WORKTOP");

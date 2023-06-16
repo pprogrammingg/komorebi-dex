@@ -1,0 +1,10 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+# Get token addresses in Pool
+# [Positive] Get Pool addresses
+CALL_METHOD    
+    Address("${component_address}")
+    "k";

@@ -27,7 +27,7 @@ fn test_komorebi() {
         .call_method(admin_component, "deposit_batch", manifest_args!(ManifestExpression::EntireWorktop))
         .build();
 
-    let admin_manifest_receipt = test_runner.execute_manifest(&mut test_runner, admin_manifest);
+    // let admin_manifest_receipt = test_runner.execute_manifest(&mut test_runner, admin_manifest);
 
     // 
     // Publish package

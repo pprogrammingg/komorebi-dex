@@ -66,11 +66,13 @@ mod pool {
             assert!(
                 (fee_to_pool >= Decimal::zero()) & (fee_to_pool <= dec!("100")), 
                 "[Pool Creation]: Fee must be between 0 and 100"
-            );
-
-            // Check USD values of each tokens equal (within certain percentage)                 
+            );                
 
             // Validation is done
+            info!(
+                "[instantiate_pool]: validation of inputs done. Inputs: token1 {:?}: {}, token2 {:?}: {}, fee_to_pool: {}", 
+                token1.resource_address(), token1.amount(), token2.resource_address(), token2.amount(), fee_to_pool
+            );
 
             // Sort and build Hashmap of the two resource token addresses
             let (bucket1, bucket2): (Bucket, Bucket) = sort_buckets(token1, token2);
@@ -373,7 +375,7 @@ mod pool {
         /// * **Check 1:** Checks that the buckets passed are of tokens that belong to this liquidity pool.
         /// * **Check 2:** Checks that the buckets passed are not empty.
         /// 
-        /// From the perspective of adding liquidity, these are all of the checks that need to be done. The RaDEX 
+        /// From the perspective of adding liquidity, these are all of the checks that need to be done. The Pool 
         /// component does not need to perform any additional checks when liquidity is being added.
         /// 
         /// # Arguments:
@@ -429,7 +431,7 @@ mod pool {
             let dm: Decimal = bucket1.amount();
             let dn: Decimal = bucket2.amount();
 
-            // Getting the values of m and n from the liquidity pool vaults
+            // Getting the values of m and n from the liquidity pool vaults (What is already in the pool)
             let m: Decimal = self.vaults[&bucket1.resource_address()].amount();
             let n: Decimal = self.vaults[&bucket2.resource_address()].amount();
             info!(
@@ -438,11 +440,14 @@ mod pool {
             );
 
             // Computing the amount of tokens to deposit into the liquidity pool from each one of the buckets passed
-            let (amount1, amount2): (Decimal, Decimal) = if ((m == Decimal::zero()) | (n == Decimal::zero())) | ((m / n) == (dm / dn)) { // Case 1
+            let (amount1, amount2): (Decimal, Decimal) = if ((m == Decimal::zero()) | (n == Decimal::zero())) | ((m * dn) == (n * dm)) { // Case 1
+                info!("Case 1");
                 (dm, dn)
             } else if (m / n) < (dm / dn) { // Case 2
+                info!("Case 2");
                 (dn * m / n, dn)
             } else { // Case 3
+                info!("Case 3");
                 (dm, dm * n / m)
             };
             info!(
@@ -551,6 +556,7 @@ mod pool {
 
             // Calculating the output amount for the given input amount of tokens and withdrawing it from the vault
             let output_amount: Decimal = self.calculate_output_amount(tokens.resource_address(), tokens.amount());
+            info!("[Swap]: output amount is : {}", output_amount);
             let output_tokens: Bucket = self.withdraw(
                 self.other_resource_address(tokens.resource_address()), 
                 output_amount
@@ -640,7 +646,8 @@ mod pool {
             );
             assert!(
                 tokens.amount() >= input_required,
-                "[Swap For Exact]: Not enough input for the desired amount of output."
+                "[Swap For Exact]: Not enough input for the desired amount of output. Input required is {}",
+                input_required
             );
 
             // Depositing the amount of input required into the vaults and taking out the requested amount

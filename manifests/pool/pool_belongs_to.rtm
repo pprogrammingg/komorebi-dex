@@ -1,0 +1,17 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+# [Postivie] Validate token address belongs to the pool
+CALL_METHOD    
+    Address("${component_address}")
+    "assert_belongs_to_pool"
+    Address("${token_a}")
+    "swap";
+# [Negative] Validate token address not belonging to the pool
+CALL_METHOD    
+    Address("${component_address}")
+    "assert_belongs_to_pool"
+    Address("${token_c}")
+    "swap";

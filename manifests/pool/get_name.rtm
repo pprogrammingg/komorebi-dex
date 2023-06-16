@@ -1,0 +1,9 @@
+# Lock fees
+CALL_METHOD
+    Address("${account_address}")
+    "lock_fee"
+    Decimal("10");
+# [Positive] Get Pool name
+CALL_METHOD    
+    Address("${component_address}")
+    "name";
