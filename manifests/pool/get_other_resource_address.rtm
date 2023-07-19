@@ -5,16 +5,16 @@ CALL_METHOD
     Decimal("10");
 # [Positive] Given an address belonging to the pool, get the other resource address
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "other_resource_address"
     Address("${token_a}");
 # [Positive] Given an address belonging to the pool, get the other resource address
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "other_resource_address"
     Address("${token_b}");
 # # [Negative] Given non-existing address given, just print error address does not belong to pool
 # CALL_METHOD    
-#     Address("${component_address}")
+#     Address("${pool_component_address}")
 #     "other_resource_address"
 #     Address("${token_c}");    

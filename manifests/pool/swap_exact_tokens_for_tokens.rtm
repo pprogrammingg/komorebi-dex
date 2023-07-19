@@ -17,7 +17,7 @@ TAKE_FROM_WORKTOP_BY_AMOUNT
 
 # [Positive] swap token_a for token_b
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "swap_exact_tokens_for_tokens"
     Bucket("input")
     Decimal("3");

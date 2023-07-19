@@ -9,20 +9,20 @@ CALL_METHOD
     Address("${account_address}")
     "withdraw"
     Address("${token_a}")
-    Decimal("135");
+    Decimal("200");
+
 TAKE_FROM_WORKTOP_BY_AMOUNT
-    Decimal("135")
+    Decimal("200")
     Address("${token_a}")
     Bucket("input");
 
-# [Positive] swap token_a for token_b
 CALL_METHOD    
-    Address("${pool_component_address}")
-    "swap_tokens_for_exact_tokens"
+    Address("${dex_component_address}")
+    "swap"
     Bucket("input")
-    Decimal("4.54");
+    Address("${token_b}");
 
-# Return 100 LP Tokens to account
+    # Return LP Tokens to account
 CALL_METHOD
     Address("${account_address}")
     "deposit_batch"

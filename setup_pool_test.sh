@@ -18,7 +18,7 @@ export token_name="token_c"
 export token_c=$(resim run manifests/pool/make_tokens.rtm | awk -F'Resource: ' 'NF>1{print $2}')
 
 
-export component_address=$(resim run manifests/pool/instantiate_pool.rtm | awk -F'Component: ' 'NF>1{print $2}')
+export pool_component_address=$(resim run manifests/pool/instantiate_pool.rtm | awk -F'Component: ' 'NF>1{print $2}')
 # extract tracking token out of output
 # export tracking_token=$(resim run manifests/pool/instantiate_pool.rtm | awk -F'Component: ' 'NF>1{print $2}')
 
@@ -27,4 +27,4 @@ echo "Package Address: $package_address"
 echo "Token A: $token_a"
 echo "Token B: $token_b"
 echo "Token C: $token_c"
-echo "Component Address: $component_address"
+echo "Pool Component Address: $pool_component_address"

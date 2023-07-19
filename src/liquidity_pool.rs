@@ -32,14 +32,12 @@ mod pool {
         ///  - Check resources are both fungible 
         ///  - Check the input token buckets are not empty
         ///  - Check fee amount set is decimal between 0 to 100
-        ///  - Check USD values of each token equal (within 0.1% of each other) 
-        ///   TODO: can USD amounts be fetched from oracle or should they be fetched from UI down
         /// Returns LP Tracking Token (for the initial liquidity provider
         /// Note: no change amount is returned as pool ratio is not established yet
         pub fn instantiate_pool(
             token1: Bucket,
             token2: Bucket,
-            fee_to_pool: Decimal) -> (ComponentAddress, Bucket) {
+            fee_to_pool: Decimal) -> (PoolComponent, Bucket) {
             // Check token addresses are not the same
             assert_ne!(
                 token1.resource_address(), token2.resource_address(),
@@ -111,19 +109,20 @@ mod pool {
                 .mint_initial_supply(100);
 
             // Creating the liquidity pool component and instantiating it
-            let liquidity_pool: ComponentAddress = Self { 
+            let liquidity_pool = Self { 
                 vaults: vaults,
                 tracking_token_address: tracking_tokens.resource_address(),
                 tracking_token_admin_badge: Vault::with_bucket(tracking_token_admin_badge),
                 fee_to_pool: fee_to_pool,
             }
             .instantiate()
-            .globalize();
-
+            // .globalize() NOTE: comment out if running manifests under `./manifests/pool` and using setup_pool_test.sh
+            ;
+            
             return (liquidity_pool, tracking_tokens);
         }
 
-         /// Checks if the given address belongs to this pool or not.
+        /// Checks if the given address belongs to this pool or not.
         /// 
         /// This method is used to check if a given resource address belongs to one of the tokens in this liquidity pool
         /// or not. A resource belongs to a liquidity pool if its address is in the addresses in the `vaults` HashMap.
@@ -514,6 +513,8 @@ mod pool {
             let tracking_tokens_manager: ResourceManager = borrow_resource_manager!(self.tracking_token_address);
             let percentage: Decimal = tracking_tokens.amount() / tracking_tokens_manager.total_supply();
 
+            info!("User about to withdraw {} of the liquidity", percentage);
+            
             // Burning the tracking tokens
             self.tracking_token_admin_badge.authorize(|| {
                 tracking_tokens.burn();
@@ -552,6 +553,18 @@ mod pool {
         ) -> Bucket {
             // Checking if the tokens belong to this liquidity pool.
             self.assert_belongs_to_pool(tokens.resource_address(), String::from("Swap"));
+
+            // For debugging purposes, get current vault reserves
+            let resource_address_1 = tokens.resource_address();
+            let resource_address_2 = self.other_resource_address(tokens.resource_address());
+            let vault_one_amount: Decimal = self.vaults[&resource_address_1].amount();
+            let vault_two_amount: Decimal = self.vaults[&resource_address_2].amount();
+
+            info!(
+                "[Add Liquidity]: Current reserves: {:?}: {}, {:?}: {}",
+                resource_address_1, vault_one_amount, resource_address_2, vault_two_amount
+            );
+            
             info!("[Swap]: K before swap: {}", self.k());
 
             // Calculating the output amount for the given input amount of tokens and withdrawing it from the vault

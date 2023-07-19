@@ -6,5 +6,5 @@ CALL_METHOD
 # Get token addresses in Pool
 # [Positive] Get Pool addresses
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "k";

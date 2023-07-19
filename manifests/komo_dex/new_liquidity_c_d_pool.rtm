@@ -8,30 +8,29 @@ CALL_METHOD
 CALL_METHOD
     Address("${account_address}")
     "withdraw"
-    Address("${token_a}")
-    Decimal("1000");
+    Address("${token_c}")
+    Decimal("2500");
 TAKE_FROM_WORKTOP_BY_AMOUNT
-    Decimal("1000")
-    Address("${token_a}")
+    Decimal("2500")
+    Address("${token_c}")
     Bucket("bucket1");
 
 # Withdraw 50 units of token_b from account and put it in bucket 
 CALL_METHOD
     Address("${account_address}")
     "withdraw"
-    Address("${token_b}")
-    Decimal("50");
+    Address("${token_d}")
+    Decimal("150");
 
 TAKE_FROM_WORKTOP_BY_AMOUNT
-    Decimal("50")
-    Address("${token_b}")
+    Decimal("150")
+    Address("${token_d}")
     Bucket("bucket2");
 
 # Invoke Instantiate with 1000 token_a and 50 token_b as start
-CALL_FUNCTION
-    Address("${package_address}")
-    "Pool"
-    "instantiate_pool"
+CALL_METHOD    
+    Address("${dex_component_address}")
+    "new_liquidity_pool"
     Bucket("bucket1")
     Bucket("bucket2")
     Decimal("0.0025");

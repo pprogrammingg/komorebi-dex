@@ -5,7 +5,7 @@ CALL_METHOD
     Decimal("10");
 # [Positive] calculate_input_amount given an input
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "calculate_output_amount"
     Address("${token_a}")
     Decimal("80");

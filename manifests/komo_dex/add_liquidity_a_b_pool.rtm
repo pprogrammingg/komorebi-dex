@@ -4,17 +4,18 @@ CALL_METHOD
     "lock_fee"
     Decimal("10");
 
+# Withdraw 1000 units of token_a from account and put it in bucket 
 CALL_METHOD
     Address("${account_address}")
     "withdraw"
     Address("${token_a}")
-    Decimal("100");
-
+    Decimal("1000");
 TAKE_FROM_WORKTOP_BY_AMOUNT
-    Decimal("100")
+    Decimal("1000")
     Address("${token_a}")
     Bucket("bucket1");
 
+# Withdraw 50 units of token_b from account and put it in bucket 
 CALL_METHOD
     Address("${account_address}")
     "withdraw"
@@ -26,14 +27,15 @@ TAKE_FROM_WORKTOP_BY_AMOUNT
     Address("${token_b}")
     Bucket("bucket2");
 
-# [Positive] add liquidity
+# Invoke Instantiate with 1000 token_a and 50 token_b as start
 CALL_METHOD    
-    Address("${pool_component_address}")
+    Address("${dex_component_address}")
     "add_liquidity"
     Bucket("bucket1")
-    Bucket("bucket2");
+    Bucket("bucket2")
+    Decimal("0.0025");
 
-# Return LPs
+    # Return LP Tokens to account
 CALL_METHOD
     Address("${account_address}")
     "deposit_batch"

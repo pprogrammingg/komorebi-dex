@@ -4,24 +4,25 @@ CALL_METHOD
     "lock_fee"
     Decimal("10");
 
-# Withdraw token_a from account
 CALL_METHOD
     Address("${account_address}")
     "withdraw"
-    Address("${token_a}")
-    Decimal("100");
+    Address("${a_b_pool_tt}")
+    Decimal("40");
+
 TAKE_FROM_WORKTOP_BY_AMOUNT
-    Decimal("100")
-    Address("${token_a}")
-    Bucket("input");
+    Decimal("40")
+    Address("${a_b_pool_tt}")
+    Bucket("tracking_token_bucket");
 
-# [Positive] swap token_a for token_b
+
+# [Positive] remove liquidity
 CALL_METHOD    
-    Address("${pool_component_address}")
-    "swap"
-    Bucket("input");
+    Address("${dex_component_address}")
+    "remove_liquidity"
+    Bucket("tracking_token_bucket");
 
-# Return 100 LP Tokens to account
+# Return LPs
 CALL_METHOD
     Address("${account_address}")
     "deposit_batch"

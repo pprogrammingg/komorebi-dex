@@ -18,7 +18,7 @@ TAKE_FROM_WORKTOP_BY_AMOUNT
 
 # [Positive] remove liquidity
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "remove_liquidity"
     Bucket("tackeing_token_bucket");
 

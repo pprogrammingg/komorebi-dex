@@ -28,7 +28,7 @@ TAKE_FROM_WORKTOP_BY_AMOUNT
 
 # [Positive] add liquidity
 CALL_METHOD    
-    Address("${component_address}")
+    Address("${pool_component_address}")
     "add_liquidity"
     Bucket("bucket1")
     Bucket("bucket2");
